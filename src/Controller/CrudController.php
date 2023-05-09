@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[Route('/')]
 class CrudController extends AbstractController
@@ -31,7 +32,24 @@ class CrudController extends AbstractController
         ]);
 
     }
+/**
+     * @Route("/apiclient", methods={"GET"})
+     */
+    public function getClientInfo(EntityManagerInterface $entityManager): Response
+    {
+        $clientinfo = $entityManager->getRepository(ClientInfo::class)->findAll();
 
+        return $this->json($clientinfo);
+    }
+    /**
+     * @Route("/apicrud", methods={"GET"})
+     */
+    public function getCrudInfo(EntityManagerInterface $entityManager): Response
+    {
+        $crud = $entityManager->getRepository(Crud::class)->findAll();
+
+        return $this->json($crud);
+    }
 
     #[Route('/new', name: 'app_crud_new', methods: ['GET', 'POST'])]
     public function new(Request $request, CrudRepository $crudRepository): Response

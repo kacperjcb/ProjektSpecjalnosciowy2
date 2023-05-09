@@ -27,11 +27,22 @@ class Crud
     #[ORM\ManyToOne(targetEntity: ClientInfo::class)]
     #[ORM\JoinColumn(name: 'order_number', referencedColumnName: 'id')]
     public $clientInfo;
+    public function jsonSerialize():mixed
+    {
+        return [
+            'id' => $this->getId(),
+            'Product_Name' => $this->getProduct_Name(),
+            'Product_Price' => $this->getProduct_Price(),
+            'Stock_Level' => $this->getStock_Level(),
+            'Description' => $this->getDescription(),
+            'clientInfo' => $this->getClientInfo(),
+        ];
+    }
     public function getId(): ?int
     {
         return $this->id;
     }
-
+   
     public function getProduct_Name(): ?string
     {
         return $this->Product_Name;
@@ -79,4 +90,9 @@ class Crud
 
         return $this;
     }
+    public function getClientInfo(): ?ClientInfo
+    {
+        return $this->clientInfo;
+    }
+    
 }

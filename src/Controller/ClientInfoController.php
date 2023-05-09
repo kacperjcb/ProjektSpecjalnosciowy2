@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
-
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\ORM\EntityManagerInterface;
 #[Route('/client/info')]
 class ClientInfoController extends AbstractController
 {
@@ -90,5 +91,14 @@ class ClientInfoController extends AbstractController
         }
 
         return $this->redirectToRoute('app_Client_Info_index', [], Response::HTTP_SEE_OTHER);
+    }
+/**
+     * @Route("/api", methods={"GET"})
+     */
+    public function getClientInfo(EntityManagerInterface $entityManager): Response
+    {
+        $clientinfo = $entityManager->getRepository(ClientInfo::class)->findAll();
+
+        return $this->json($clientinfo);
     }
 }

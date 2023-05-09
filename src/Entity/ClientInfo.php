@@ -3,9 +3,11 @@
 namespace App\Entity;
 use App\Repository\ClientInfoRepository;
 use Doctrine\ORM\Mapping as ORM;
-
+use JsonSerializable;
+use Doctrine\DBAL\Types\Types;
+use App\Entity\crud;
 #[ORM\Entity(repositoryClass: ClientInfoRepository::class)]
-class ClientInfo
+class ClientInfo implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -30,6 +32,18 @@ class ClientInfo
     #[ORM\Column(type: 'integer', nullable:true)]
     private $OrderNumber;
 
+    public function jsonSerialize():array
+    {
+        return [
+            'id' => $this->getId(),
+            'Name' => $this->getName(),
+            'Surname' => $this->getSurname(),
+            'City' => $this->getCity(),
+            'PostCode' => $this->getPostCode(),
+            'Address' => $this->getAddress(),
+            'OrderNumber' => $this->getOrderNumber(),
+        ];
+    }
     public function getId(): ?int
     {
         return $this->id;
