@@ -24,7 +24,9 @@ class Crud
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     public $Description;
-
+    #[ORM\ManyToOne(targetEntity: ClientInfo::class)]
+    #[ORM\JoinColumn(name: 'order_number', referencedColumnName: 'id')]
+    public $clientInfo;
     public function getId(): ?int
     {
         return $this->id;

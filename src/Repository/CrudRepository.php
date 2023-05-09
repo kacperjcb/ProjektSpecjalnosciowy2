@@ -50,13 +50,15 @@ class CrudRepository extends ServiceEntityRepository
     }
     public function selectAll()
     {
-        $conn = $this->getEntityManager()->getConnection();
-        $sql= 'select client_info.`id`,`Name`, `Surname`, `City`, `kod_pocztowy`, `Address`, `numer_zamowienia`,`Product_Name`,`Description` from crud, client_info where crud.id=client_info.numer_zamowienia';
-        $stmt = $conn->prepare($sql);
-        $resultSet = $stmt->executeQuery();
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            'SELECT ci.id, ci.Name, ci.Surname, ci.City, ci.PostCode, ci.Address, ci.OrderNumber, c.Product_Name, c.Description
+            FROM App\Entity\Crud c
+            JOIN App\Entity\ClientInfo ci
+            WHERE c.id = ci.OrderNumber'
+        );
 
-
-        return $resultSet->fetchAllAssociative();
+        return $query->getResult();
 
 
 
