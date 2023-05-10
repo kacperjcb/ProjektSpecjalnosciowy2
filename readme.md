@@ -1,4 +1,4 @@
-Requirements <br> Symfony >=6.1
+Requirements: <br> Symfony >=6.1
  <br>"php": ">=8.1",  <br>
 Database for example mysql - can be changed in .env file <br>
 Commands: <br>
