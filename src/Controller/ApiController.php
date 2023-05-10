@@ -13,9 +13,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+
+
+#[Security('is_granted(\'ROLE_ADMIN\')')]
+
 #[Route('/api')]
+
 class ApiController extends AbstractController
 {
 
@@ -137,8 +143,9 @@ class ApiController extends AbstractController
         return $this->json($crud);
     }
 
-    #[Route("/crud", methods: ["POST"])]
-    public function createCrudInfo(ManagerRegistry $doctrine, Request $request): JsonResponse
+    #[Route("/crud", methods:["POST"])]
+   
+    public function createCrud(ManagerRegistry $doctrine,Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -152,8 +159,9 @@ class ApiController extends AbstractController
         $entityManager->persist($crud);
         $entityManager->flush();
 
-        return new JsonResponse($crud, JsonResponse::HTTP_CREATED);
+        return new JsonResponse(['status' => 'CRUD created!'], JsonResponse::HTTP_CREATED);
     }
+ 
 
 
     #[Route("/crud/{id}", methods: ["PUT"])]
