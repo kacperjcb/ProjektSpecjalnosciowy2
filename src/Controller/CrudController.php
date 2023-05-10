@@ -59,8 +59,8 @@ class CrudController extends AbstractController
 
         ]);
     }
-    #[Route('/niedostepny', name: 'app_niedostepny', methods: ['GET'])]
-    public function niedostepny()
+    #[Route('/unavailable', name: 'app_unavailable', methods: ['GET'])]
+    public function unavailable()
     {
         return $this->render('client_info/noproduct.html.twig', [
 
@@ -105,7 +105,7 @@ class CrudController extends AbstractController
             //     $entityManager->flush();
             // }
             if($crud->getStock_Level()==0){
-                return $this->redirectToRoute('app_niedostepny');
+                return $this->redirectToRoute('app_unavailable');
             }
             return $this->redirectToRoute('app_client_info_new', [
                 'id' => $crud->getId(),
