@@ -34,60 +34,60 @@ class ClientInfoController extends AbstractController
     #[Route('/new', name: 'app_client_info_new', methods: ['GET', 'POST'])]
     public function new(ManagerRegistry $doctrine, Request $request, ClientInfoRepository $ClientInfoRepository): Response
     {
-        $daneKlientum = new ClientInfo();
-        $form = $this->createForm(ClientInfoType::class, $daneKlientum);
+        $clientInfo = new ClientInfo();
+        $form = $this->createForm(ClientInfoType::class, $clientInfo);
         $form->handleRequest($request);
         $entityManager = $doctrine->getManager();
         $id=($_GET["id"]);
         $crud = $entityManager->getRepository(Crud::class)->find($id);
         
         if ($form->isSubmitted() && $form->isValid()) {
-            $ClientInfoRepository->add($daneKlientum, true);
+            $ClientInfoRepository->add($clientInfo, true);
             if ($crud->getStock_Level()>= 1) {
                 $crud->setStock_Level($crud->getStock_Level() - 1);
                 $entityManager->flush();
             }
-            return $this->redirectToRoute('app_thankyou', ['Name'=>$daneKlientum->getName()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_thankyou', ['Name'=>$clientInfo->getName()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('client_info/new.html.twig', [
-            'client_info' => $daneKlientum,
+            'client_info' => $clientInfo,
             'form' => $form,
             'id'=> $id,
         ]);
     }
 
     #[Route('/{id}', name: 'app_client_info_show', methods: ['GET'])]
-    public function show(ClientInfo $daneKlientum): Response
+    public function show(ClientInfo $clientInfo): Response
     {
         return $this->render('client_info/show.html.twig', [
-            'client_info' => $daneKlientum,
+            'client_info' => $clientInfo,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_client_info_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, ClientInfo $daneKlientum, ClientInfoRepository $ClientInfoRepository): Response
+    public function edit(Request $request, ClientInfo $clientInfo, ClientInfoRepository $ClientInfoRepository): Response
     {
-        $form = $this->createForm(ClientInfoType::class, $daneKlientum);
+        $form = $this->createForm(ClientInfoType::class, $clientInfo);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $ClientInfoRepository->add($daneKlientum, true);
+            $ClientInfoRepository->add($clientInfo, true);
 
             return $this->redirectToRoute('app_Client_Info_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('client_info/edit.html.twig', [
-            'client_info' => $daneKlientum,
+            'client_info' => $clientInfo,
             'form' => $form,
         ]);
     }
 
     #[Route('/{id}', name: 'app_client_info_delete', methods: ['POST'])]
-    public function delete(Request $request, ClientInfo $daneKlientum, ClientInfoRepository $ClientInfoRepository): Response
+    public function delete(Request $request, ClientInfo $clientInfo, ClientInfoRepository $ClientInfoRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$daneKlientum->getId(), $request->request->get('_token'))) {
-            $ClientInfoRepository->remove($daneKlientum, true);
+        if ($this->isCsrfTokenValid('delete'.$clientInfo->getId(), $request->request->get('_token'))) {
+            $ClientInfoRepository->remove($clientInfo, true);
         }
 
         return $this->redirectToRoute('app_Client_Info_index', [], Response::HTTP_SEE_OTHER);

@@ -99,7 +99,7 @@
 
        <div class="divy">
         Find by name <br>
-        <input name="search" value="{{search}}"/><br><button type="submit">Szukaj</button>
+        <input name="search" value="{{search}}"/><br><button type="submit">Search</button>
            </div>
     </form>
 {%elseif (is_granted('ROLE_USER'))%}
@@ -134,7 +134,13 @@
             {% endfor %}
             </tbody>
         </table>
+  <form>
 
+       <div class="divy">
+        Find by name <br>
+        <input name="search" value="{{search}}"/><br><button type="submit">Search</button>
+           </div>
+    </form>
     {% else %}
         <h1> You have to Login if you want to see products. </h1>
 
