@@ -4,9 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Crud;
 use App\Entity\ClientInfo;
-use App\Form\CrudType;
-use App\Repository\CrudRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -137,7 +134,7 @@ class ApiController extends AbstractController
         $crud = $entityManager->getRepository(Crud::class)->find($id);
 
         if (!$crud) {
-            return new JsonResponse(['error' => 'Crud info not found'], JsonResponse::HTTP_NOT_FOUND);
+            return new JsonResponse(['error' => 'Product info not found'], JsonResponse::HTTP_NOT_FOUND);
         }
 
         return $this->json($crud);
@@ -159,7 +156,7 @@ class ApiController extends AbstractController
         $entityManager->persist($crud);
         $entityManager->flush();
 
-        return new JsonResponse(['status' => 'CRUD created!'], JsonResponse::HTTP_CREATED);
+        return new JsonResponse(['status' => 'Product created!'], JsonResponse::HTTP_CREATED);
     }
  
 
@@ -173,7 +170,7 @@ class ApiController extends AbstractController
         $crud = $entityManager->getRepository(Crud::class)->find($id);
 
         if (!$crud) {
-            return new JsonResponse(['error' => 'Crud info not found'], JsonResponse::HTTP_NOT_FOUND);
+            return new JsonResponse(['error' => 'Product info not found'], JsonResponse::HTTP_NOT_FOUND);
         }
 
         $crud->setProduct_Name($data['Product_Name']);
@@ -195,7 +192,7 @@ class ApiController extends AbstractController
         $crud = $entityManager->getRepository(Crud::class)->find($id);
 
         if (!$crud) {
-            return new JsonResponse(['error' => 'Crud info not found'], JsonResponse::HTTP_NOT_FOUND);
+            return new JsonResponse(['error' => 'Product info not found'], JsonResponse::HTTP_NOT_FOUND);
         }
 
         if (isset($data['Product_Name'])) {

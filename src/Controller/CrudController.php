@@ -53,7 +53,7 @@ class CrudController extends AbstractController
         ]);
     }
     #[Route('/about', name: 'app_about', methods: ['GET'])]
-    public function ostronie()
+    public function about()
     {
         return $this->render('about.html.twig', [
 
