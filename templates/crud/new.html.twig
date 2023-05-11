@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Crud{% endblock %}
+{% block title %}New product{% endblock %}
 
 {% block body %}
-    <h2>Stwórz nowy produkt</h2>
+    <h2>Create new product</h2>
 
     {{ include('crud/_form.html.twig') }}
 
-    <a class="btn btn-primary" href="{{ path('app_crud_index') }}" role="button">Wróć do listy produktów</a>
+    <a class="btn btn-primary" href="{{ path('app_crud_index') }}" role="button">Back to product list</a>
 {% endblock %}

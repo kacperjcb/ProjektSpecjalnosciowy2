@@ -66,11 +66,11 @@ class CrudController extends AbstractController
 
         ]);
     }
-    #[Route('/zamowienia', name: 'app_polaczone', methods: ['GET'])]
-    public function polaczone(CrudRepository $crudRepository): Response
+    #[Route('/orders', name: 'app_orders', methods: ['GET'])]
+    public function orders(CrudRepository $crudRepository): Response
     {
-        return $this->render('polaczonedane.html.twig', [
-            'polaczone'=>$crudRepository->selectAll(),
+        return $this->render('orders.html.twig', [
+            'orders'=>$crudRepository->selectAll(),
         ]);
     }
     #[Route('/contact', name: 'app_contact', methods: ['GET'])]

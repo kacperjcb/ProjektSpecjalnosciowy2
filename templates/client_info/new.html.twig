@@ -1,22 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New ClientInfo{% endblock %}
+{% block title %}Shopping info{% endblock %}
 
 {% block body %}
 
 
 {%if (is_granted('ROLE_ADMIN'))%}
-    <h1>Dane do wysyłki (admin)</h1>
+    <h1>Shipping information - you are login as admin</h1>
 
     {{ include('client_info/_form.html.twig') }}
 
-    <a href="{{ path('app_Client_Info_index') }}">Sprawdź listę wszystkich zamówień</a>
+    <a href="{{ path('app_Client_Info_index') }}">List of all orders</a>
     {% elseif (is_granted('ROLE_USER'))%}
-        <h1>Dane do wysyłki (user)</h1>
+        <h1>Shipping information </h1>
 
         {{ include('client_info/_form.html.twig') }}
 {%else %}
-    Nie możesz zobaczyć tej strony ponieważ jesteś nie zalogowany
+    You have to log in if you want to see product's list.
     {% endif %}
 {% endblock %}
 
