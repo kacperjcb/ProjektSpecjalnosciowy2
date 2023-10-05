@@ -32,28 +32,32 @@ class ClientInfoController extends AbstractController
         ]);
     }
     #[Route('/new', name: 'app_client_info_new', methods: ['GET', 'POST'])]
-    public function new(ManagerRegistry $doctrine, Request $request, ClientInfoRepository $ClientInfoRepository): Response
+    public function new(ManagerRegistry $doctrine, Request $request, ClientInfoRepository $clientInfoRepository): Response
     {
         $clientInfo = new ClientInfo();
         $form = $this->createForm(ClientInfoType::class, $clientInfo);
         $form->handleRequest($request);
         $entityManager = $doctrine->getManager();
-        $id=($_GET["id"]);
+
+        // Użyj obiektu Request do pobrania parametru 'id' z zapytania GET
+        $id = $request->query->get('id');
+
+        // Tutaj zdefiniuj zmienną $crud na podstawie ID lub inaczej, w zależności od twoich potrzeb
         $crud = $entityManager->getRepository(Crud::class)->find($id);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $ClientInfoRepository->add($clientInfo, true);
-            if ($crud->getStock_Level()>= 1) {
+            $clientInfoRepository->add($clientInfo, true);
+            if ($crud && $crud->getStock_Level() >= 1) {
                 $crud->setStock_Level($crud->getStock_Level() - 1);
                 $entityManager->flush();
             }
-            return $this->redirectToRoute('app_thankyou', ['Name'=>$clientInfo->getName()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_thankyou', ['Name' => $clientInfo->getName()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('client_info/new.html.twig', [
             'client_info' => $clientInfo,
             'form' => $form,
-            'id'=> $id,
+            'id' => $id,
         ]);
     }
 
