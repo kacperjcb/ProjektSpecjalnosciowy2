@@ -20,8 +20,7 @@ class ClientInfoType extends AbstractType
             ->add('City')
             ->add('PostCode')
             ->add('Address')
-            ->add('OrderNumber', HiddenType::class,[    
-                ]);
+            ->add('OrderNumber', HiddenType::class);
 
 
     }

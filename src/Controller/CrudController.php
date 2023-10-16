@@ -89,32 +89,23 @@ class CrudController extends AbstractController
     }
 
     #[Route('{id}/sell', name: 'app_crud_sell', methods: ['GET', 'POST'])]
-    public function sellproduct(ManagerRegistry $doctrine, int $id): Response
+    public function sellProduct(int $id, CrudRepository $crudRepository): Response
     {
-        {
-            $entityManager = $doctrine->getManager();
-            $crud = $entityManager->getRepository(Crud::class)->find($id);
+        $crud = $crudRepository->find($id);
 
-            if (!$crud) {
-                throw $this->createNotFoundException(
-                    'No product found for id '.$id
-                );
-            }
-            // if ($crud->getProductLevel()>= 1) {
-            //     $crud->setProductLevel($crud->getProductLevel() - 1);
-            //     $entityManager->flush();
-            // }
-            if($crud->getStock_Level()==0){
-                return $this->redirectToRoute('app_unavailable');
-            }
-            return $this->redirectToRoute('app_client_info_new', [
-                'id' => $crud->getId(),
-            ]);
-            
-           
-           
+        if (!$crud) {
+            return $this->createNotFoundException('No product found for id ' . $id);
+        }
+
+        if ($crud->getStock_Level() == 0) {
+            return $this->redirectToRoute('app_unavailable');
+        }
+
+        return $this->redirectToRoute('app_client_info_new', [
+            'id' => $crud->getId(),
+        ]);
     }
-}
+
     #[Route('/{id}/edit', name: 'app_crud_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Crud $crud, CrudRepository $crudRepository): Response
     {
