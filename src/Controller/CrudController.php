@@ -17,20 +17,52 @@ use Doctrine\ORM\EntityManagerInterface;
 #[Route('/')]
 class CrudController extends AbstractController
 {
+
     #[Route('/', name: 'app_crud_index', methods: ['GET'])]
     public function index2(CrudRepository $crudRepository, Request $request): Response
     {
+        $search = $request->query->get('search');
+        $sortBy = $request->query->get('sortBy', 'Product_Name');
+        $sortOrder = $request->query->get('sortOrder', 'asc');
 
-        $search = $request->get('search');
-        $sell = $request->get('sell');
+        $allowedSortFields = ['Id', 'Product_Name', 'Product_Price', 'Stock_Level', 'Description']; // Define the sortable fields
 
+        if (!in_array($sortBy, $allowedSortFields)) {
+            // Handle invalid sortBy parameters or set a default value
+            $sortBy = 'Product_Name';
+        }
+
+        $products = ($search) ? $crudRepository->search($search) : $crudRepository->findAll();
+
+        // Sorting products based on the selected parameters
+        usort($products, function ($a, $b) use ($sortOrder, $sortBy) {
+            if ($sortBy === 'Id') {
+                // Handle sorting by "Id" separately
+                $fieldA = $a->getId();
+                $fieldB = $b->getId();
+            } else {
+                // For other fields, use dynamic method calls
+                $fieldA = $a->{'get' . $sortBy}();
+                $fieldB = $b->{'get' . $sortBy}();
+            }
+
+            if ($fieldA === $fieldB) {
+                return 0;
+            }
+
+            if ($sortOrder === 'asc') {
+                return ($fieldA < $fieldB) ? -1 : 1;
+            } else {
+                return ($fieldA > $fieldB) ? -1 : 1;
+            }
+        });
 
         return $this->render('crud/index.html.twig', [
-            'cruds' => ($search) ? $crudRepository->search($search) : $crudRepository->findAll(),
+            'cruds' => $products,
             'search' => $search,
-            'sell' => $sell,
+            'sortBy' => $sortBy,
+            'sortOrder' => $sortOrder,
         ]);
-
     }
 
 

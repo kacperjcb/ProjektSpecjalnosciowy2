@@ -58,14 +58,14 @@
     {% if (is_granted('ROLE_ADMIN'))%}
     <table class="table table-striped table-dark">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Product_Name</th>
-                <th>Product_Price</th>
-                <th>Stock_Level</th>
-                <th>Description</th>
-                <th>Options</th>
-            </tr>
+        <tr>
+            <th><a href="{{ path('app_crud_index', {'sortBy': 'Id', 'sortOrder': (sortBy == 'Id' and sortOrder == 'asc') ? 'desc' : 'asc'}) }}">Id</a></th>
+            <th><a href="{{ path('app_crud_index', {'sortBy': 'Product_Name', 'sortOrder': (sortBy == 'Product_Name' and sortOrder == 'asc') ? 'desc' : 'asc'}) }}">Product Name</a></th>
+            <th><a href="{{ path('app_crud_index', {'sortBy': 'Product_Price', 'sortOrder': (sortBy == 'Product_Price' and sortOrder == 'asc') ? 'desc' : 'asc'}) }}">Product Price</a></th>
+            <th><a href="{{ path('app_crud_index', {'sortBy': 'Stock_Level', 'sortOrder': (sortBy == 'Stock_Level' and sortOrder == 'asc') ? 'desc' : 'asc'}) }}">Stock Level</a></th>
+            <th><a href="{{ path('app_crud_index', {'sortBy': 'Description', 'sortOrder': (sortBy == 'Description' and sortOrder == 'asc') ? 'desc' : 'asc'}) }}">Description</a></th>
+            <th>Options</th>
+        </tr>
         </thead>
         <tbody>
 
@@ -107,10 +107,11 @@
         <table class="table table-striped table-dark">
             <thead>
             <tr>
-                <th>Product name</th>
-                <th>Price</th>
-                <th>Stock Level</th>
-                <th>Description</th>
+
+                <th><a href="{{ path('app_crud_index', {'sortBy': 'Product_Name', 'sortOrder': (sortBy == 'Product_Name' and sortOrder == 'asc') ? 'desc' : 'asc'}) }}">Product Name</a></th>
+                <th><a href="{{ path('app_crud_index', {'sortBy': 'Product_Price', 'sortOrder': (sortBy == 'Product_Price' and sortOrder == 'asc') ? 'desc' : 'asc'}) }}">Product Price</a></th>
+                <th><a href="{{ path('app_crud_index', {'sortBy': 'Stock_Level', 'sortOrder': (sortBy == 'Stock_Level' and sortOrder == 'asc') ? 'desc' : 'asc'}) }}">Stock Level</a></th>
+                <th><a href="{{ path('app_crud_index', {'sortBy': 'Description', 'sortOrder': (sortBy == 'Description' and sortOrder == 'asc') ? 'desc' : 'asc'}) }}">Description</a></th>
                 <th>Options</th>
             </tr>
             </thead>
