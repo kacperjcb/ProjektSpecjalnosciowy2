@@ -140,6 +140,53 @@ class CrudController extends AbstractController
 
         return $txtContent;
     }
+    #[Route('/export-csv', name: 'app_export_csv')]
+    public function exportCsv(CrudRepository $crudRepository): Response
+    {
+        // Get the data to export, e.g., from your repository
+        $data = $crudRepository->selectAll();
+
+        // Create a CSV response
+        $response = new Response($this->generateCsv($data));
+
+        // Set response headers for CSV download
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="exported_data.csv"');
+
+        return $response;
+    }
+
+    private function generateCsv($data)
+    {
+        $output = fopen('php://temp', 'r+');
+
+        // Add headers to the CSV
+        fputcsv($output, ['ID', 'Name', 'Surname', 'City', 'Post Code', 'Address', 'Product Name', 'Description']);
+
+        // Add data rows
+        foreach ($data as $item) {
+            fputcsv($output, [
+                $item['id'],
+                $item['Name'],
+                $item['Surname'],
+                $item['City'],
+                $item['PostCode'],
+                $item['Address'],
+                $item['Product_Name'],
+                $item['Description'],
+            ]);
+        }
+
+        rewind($output);
+
+        // Read the CSV content
+        $csvContent = stream_get_contents($output);
+
+        fclose($output);
+
+        return $csvContent;
+    }
+
 
 
     #[Route('/orders', name: 'app_orders', methods: ['GET', 'POST'])]
