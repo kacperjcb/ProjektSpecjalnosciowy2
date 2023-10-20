@@ -84,6 +84,7 @@ class CrudController extends AbstractController
             'form' => $form,
         ]);
     }
+
     #[Route('/about', name: 'app_about', methods: ['GET'])]
     public function about()
     {
@@ -91,6 +92,7 @@ class CrudController extends AbstractController
 
         ]);
     }
+
     #[Route('/unavailable', name: 'app_unavailable', methods: ['GET'])]
     public function unavailable()
     {
@@ -98,13 +100,65 @@ class CrudController extends AbstractController
 
         ]);
     }
-    #[Route('/orders', name: 'app_orders', methods: ['GET'])]
-    public function orders(CrudRepository $crudRepository): Response
+    #[Route('/export-txt', name: 'app_export_txt')]
+    public function exportTxt(CrudRepository $crudRepository): Response
     {
+        // Get the data to export, e.g., from your repository
+        $data = $crudRepository->selectAll();
+
+
+        // Check if $data is an array
+        if (!is_array($data)) {
+            throw new \RuntimeException('Invalid data for export');
+        }
+
+        // Create a TXT response
+        $response = new Response($this->generateTxt($data));
+
+        // Set response headers for TXT download
+        $response->headers->set('Content-Type', 'text/plain');
+        $response->headers->set('Content-Disposition', 'attachment; filename="exported_data.txt"');
+
+        return $response;
+    }
+
+    private function generateTxt($data)
+    {
+        $txtContent = '';
+
+        // Generate the plain text content
+        foreach ($data as $item) {
+            $txtContent .= "ID: " . $item['id'] . "\n";
+            $txtContent .= "Name: " . $item['Name'] . "\n";
+            $txtContent .= "Surname: " . $item['Surname'] . "\n";
+            $txtContent .= "City: " . $item['City'] . "\n";
+            $txtContent .= "Post Code: " . $item['PostCode'] . "\n";
+            $txtContent .= "Address: " . $item['Address'] . "\n";
+            $txtContent .= "Product Name: " . $item['Product_Name'] . "\n";
+            $txtContent .= "Description: " . $item['Description'] . "\n\n";
+        }
+
+        return $txtContent;
+    }
+
+
+    #[Route('/orders', name: 'app_orders', methods: ['GET', 'POST'])]
+    public function orders(CrudRepository $crudRepository, Request $request): Response
+    {
+        $exportRequest = $request->query->get('export');
+
+        if ($exportRequest === 'txt') {
+            // Export to text file
+            return $this->exportTxt($crudRepository);
+        }
+
+        // Display orders
         return $this->render('orders.html.twig', [
-            'orders'=>$crudRepository->selectAll(),
+            'orders' => $crudRepository->selectAll(),
         ]);
     }
+
+
     #[Route('/contact', name: 'app_contact', methods: ['GET'])]
     public function CONTACT()
     {
@@ -112,6 +166,7 @@ class CrudController extends AbstractController
 
         ]);
     }
+
     #[Route('/{id}', name: 'app_crud_show', methods: ['GET'])]
     public function show(Crud $crud): Response
     {
@@ -159,12 +214,19 @@ class CrudController extends AbstractController
     #[Route('/{id}', name: 'app_crud_delete', methods: ['POST'])]
     public function delete(Request $request, Crud $crud, CrudRepository $crudRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$crud->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $crud->getId(), $request->request->get('_token'))) {
             $crudRepository->remove($crud, true);
         }
 
         return $this->redirectToRoute('app_crud_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+
+
+
+
+
 
 
 }
